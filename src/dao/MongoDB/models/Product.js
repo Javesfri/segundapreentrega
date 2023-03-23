@@ -44,7 +44,6 @@ else{
 }
 
 
-export default model;
 export class ManagerProductMongoDB extends ManagerMongoDB {
     constructor() {
         super(model)
