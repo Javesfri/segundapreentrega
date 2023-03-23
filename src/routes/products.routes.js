@@ -1,18 +1,36 @@
 import { Router } from "express";
-import { ProductManager } from "../controllers/ProductManager.js"
+//import { ProductManager } from "../controllers/ProductManager.js"
+import { getManagerProducts}  from "../dao/daoManager.js";
+
+
 const routerProduct = Router();
-const productManager=new ProductManager('src/models/productos.txt')
+
+
+
+
+
+
+
 
 routerProduct.get('/',async (req,res)=>{
-    let {limit} = req.query
-    const products = await productManager.getProducts();
-    if(limit){
-       let productsLimit  = products.slice(0,parseInt(limit))
-        res.json(productsLimit)
-    }else{
+    const category= req.query.category ;
+    const sort= req.query.sort ;
+    const page= parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const data = await getManagerProducts();
+    const productManager=new data.ManagerProductMongoDB
+    try{
+        let query={}
+        if(category){
+            query.category = category
+        }
+        let products =await productManager.model.paginate(query,{limit:limit,page:page,sort:sort});
         res.json(products)
-
+    }catch(error){
+        console.log(error)
     }
+    
+
 })
 
 
@@ -25,20 +43,25 @@ routerProduct.get('/:pid',async (req,res)=>{
 })
 
 routerProduct.post('/',async (req,res) =>{
-    let newProduct=await productManager.addProduct(req.body)
+    const data = await getManagerProducts();
+    const productManager=new data.ManagerProductMongoDB
+    console.log(await req.body)
+    let newProduct=await productManager.addElements(req.body)
     res.send(newProduct)
-    console.log(await productManager.getProducts())
 })
 
 routerProduct.delete('/:id',async (req,res) =>{
+    const data = await getManagerProducts();
+    const productManager=new data.ManagerProductMongoDB
     const pid= parseInt(req.params.id)
-    let deleteProduct = await productManager.deleteProduct(pid)
-    res.send(await productManager.getProducts());
+    console.log(req.params.id)
+    await productManager.deleteElement(req.params.id)
+    res.send(await productManager.getElements());
 })
 
 routerProduct.put('/:id',async (req,res) =>{
     const pid= parseInt(req.params.id)
-    let updateProduct = await productManager.updateProduct(pid,req.body)
+    let updateProduct = await productManager.updateElement(req.params.id,req.body)
     res.send(updateProduct);
 })
 

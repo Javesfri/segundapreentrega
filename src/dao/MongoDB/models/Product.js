@@ -1,6 +1,6 @@
 import { ManagerMongoDB } from "../../../db/mongoDBManager.js";
-import mongoose,{Schema} from "mongoose";
-
+import mongoose,{ Schema } from "mongoose";
+import mongoosePaginate from "mongoose-paginate-v2"
 let model;
 
 
@@ -38,19 +38,16 @@ else{
             type: String,
             required: true,
         },
-        status: {
-            type: Boolean,
-            required: true,
-        }
     })
+    productSchema.plugin(mongoosePaginate)
     model= mongoose.model('products',productSchema)
 }
 
 
-
-export class ManagerMessageMongoDB extends ManagerMongoDB {
+export default model;
+export class ManagerProductMongoDB extends ManagerMongoDB {
     constructor() {
-        super(url, model)
+        super(model)
         //Aqui irian los atributos propios de la clase
     }
     //Aqui irian los metodos propios de la clase
