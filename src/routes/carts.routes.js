@@ -16,14 +16,23 @@ routerCart.post('/', async (req,res)=>{
 
 routerCart.get('/:cid', async (req,res)=>{
     const products=await cartManager.getProducts(req.params.cid)
-    res.send(products)
+    const listProducts= products.products
+    const total=[]
+    listProducts.map(prod =>{
+        const newProd={...prod.product._doc}
+        console.log(newProd)
+        const{title,description,price,code,category}=newProd
+        total.push({title:title,description:description,price:price,code:code,category:category})
+
+    })
+    res.render("cart", {total})
 
 })
+
 
 routerCart.post('/:cid/products/:pid',async (req,res)=>{
     const addProductToCart=await cartManager.addProduct(req.params.cid,req.params.pid)
     res.send(addProductToCart)
-
 })
 
 

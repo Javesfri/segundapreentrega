@@ -41,6 +41,7 @@ export class ManagerCartMongoDB extends ManagerMongoDB {
                 cart.save()
                 return true
             }catch(error){
+                console.log(error)
                 return error
             }
         }
@@ -74,8 +75,9 @@ export class ManagerCartMongoDB extends ManagerMongoDB {
     
     async deleteAllProducts(idCart){
         try{
-            const cart=this.model.findById(idCart)
+            const cart=await this.model.findById(idCart)
             cart.products=[]
+            cart.save()
         }catch(error){
             console.log(error)
             return error
