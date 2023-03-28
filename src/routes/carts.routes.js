@@ -14,6 +14,11 @@ routerCart.post('/', async (req,res)=>{
     res.send(newCart)
 })
 
+routerCart.get('/', async (req,res)=>{
+    const newCart = await cartManager.getElements()
+    res.send(newCart)
+})
+
 routerCart.get('/:cid', async (req,res)=>{
     const products=await cartManager.getProducts(req.params.cid)
     const listProducts= products.products

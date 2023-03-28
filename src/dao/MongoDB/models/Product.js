@@ -49,5 +49,26 @@ export class ManagerProductMongoDB extends ManagerMongoDB {
         super(model)
         //Aqui irian los atributos propios de la clase
     }
+
+    async getPagProducts(category,sort,page,limit){
+        try {
+            let query = {};
+            if (category) {
+              query.category = category;
+            }
+            let products = await this.model.paginate(query, {
+              limit: limit,
+              page: page,
+              sort: sort,
+            });
+            console.log(products)
+            return products
+            
+            //res.json(products)
+          } catch (error) {
+            console.log(error);
+            return error
+          }
+    }
     //Aqui irian los metodos propios de la clase
 }
