@@ -28,14 +28,11 @@ routerProduct.post("/", async (req, res) => {
 });
 
 routerProduct.delete("/:id", async (req, res) => {
-  const pid = parseInt(req.params.id);
-  console.log(req.params.id);
   await productManager.deleteElement(req.params.id);
   res.send(await productManager.getElements());
 });
 
 routerProduct.put("/:id", async (req, res) => {
-  const pid = parseInt(req.params.id);
   let updateProduct = await productManager.updateElement(
     req.params.id,
     req.body
