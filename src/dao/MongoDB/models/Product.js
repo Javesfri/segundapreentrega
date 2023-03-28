@@ -61,10 +61,7 @@ export class ManagerProductMongoDB extends ManagerMongoDB {
               page: page,
               sort: sort,
             });
-            console.log(products)
             return products
-            
-            //res.json(products)
           } catch (error) {
             console.log(error);
             return error

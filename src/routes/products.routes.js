@@ -1,7 +1,7 @@
 import { Router } from "express";
 //import { ProductManager } from "../controllers/ProductManager.js"
-import { getManagerProducts } from "../dao/daoManager.js";
-
+import {ManagerProductMongoDB} from '../dao/MongoDB/models/Product.js'
+const productManager=new ManagerProductMongoDB
 const routerProduct = Router();
 
 routerProduct.get("/", async (req, res) => {
@@ -9,15 +9,13 @@ routerProduct.get("/", async (req, res) => {
   const sort = req.query.sort;
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 10;
-  const data = await getManagerProducts();
-  const productManager = new data.ManagerProductMongoDB();
-  const products = productManager.getPagProducts(category,sort,page,limit)
-  res.render("products",products);
+  const products =await productManager.getPagProducts(category,sort,page,limit)
+  console.log(await products)
+  res.send(products);
 });
 
 routerProduct.get("/:pid", async (req, res) => {
-  const pid = parseInt(req.params.pid);
-  const productId = await productManager.getProductById(pid);
+  const productId = await productManager.getElementById(req.params.pid);
   res.send(productId);
 });
 
@@ -30,8 +28,6 @@ routerProduct.post("/", async (req, res) => {
 });
 
 routerProduct.delete("/:id", async (req, res) => {
-  const data = await getManagerProducts();
-  const productManager = new data.ManagerProductMongoDB();
   const pid = parseInt(req.params.id);
   console.log(req.params.id);
   await productManager.deleteElement(req.params.id);
