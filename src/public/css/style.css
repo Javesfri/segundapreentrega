@@ -44,3 +44,8 @@ button{
 .imagen-list{
     width: 50px;
 }
+
+.image-cart-list{
+    width: 50px !important;
+    height: auto;
+}

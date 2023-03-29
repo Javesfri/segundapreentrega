@@ -20,19 +20,20 @@ routerCart.get('/', async (req,res)=>{
 })
 
 routerCart.get('/:cid', async (req,res)=>{
-    const products=await cartManager.getProducts(req.params.cid)
-    const listProducts=await products.products
-    const total=[]
+    const cart=await cartManager.getProducts(req.params.cid)
+    const listProducts=await cart.products
     console.log(await listProducts)
+    const total=[]
     listProducts.map(prod =>{
         const newProd={...prod.product._doc}
         console.log(newProd)
-        const{title,description,price,code,category}=newProd
-        total.push({title:title,description:description,price:price,code:code,category:category})
+        const{title,description,price,code,category,thumbnail}=newProd
+        total.push({title:title,description:description,price:price,code:code,category:category,quantity:prod.quantity ,imagen:thumbnail})
 
     })
-    res.send(total)
-    //res.render("cart", {total})
+    console.log(await total)
+    //res.send(total)
+    res.render("cart", {total})
 
 })
 
@@ -45,7 +46,7 @@ routerCart.post('/:cid/products/:pid',async (req,res)=>{
 
 
 
-routerCart.delete('/:cid/product/:pid',async (req,res)=>{
+routerCart.delete('/:cid/products/:pid',async (req,res)=>{
     const deleteProductOfCart=await cartManager.deleteProduct(req.params.cid,req.params.pid);
     res.send(deleteProductOfCart);
 })
@@ -56,7 +57,8 @@ routerCart.delete('/:cid', async(req,res) =>{
 })
 
 routerCart.put('/:cid/products/:pid', async (req,res)=>{
-    const updateProduct= await cartManager.updateProduct()
+    const updateProduct= await cartManager.updateProduct(req.params.cid,req.params.pid,req.body)
+    res.send(updateProduct)
 })
 
 export default routerCart

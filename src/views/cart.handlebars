@@ -1,11 +1,12 @@
 <h1>CARRITO</h1>
 
 {{#each total}}
-    <li><strong>{{this.title}}</strong><ul><li
+    <li><strong>{{this.title}}</strong>
+        </li><img class="image-cart-list"style="width:100px;list-style-type:none;" src="{{this.imagen}}" ><li
+        ><ul><li
         ><strong>Descripcion: </strong>{{this.description}}</li><li
         ><strong>Precio: </strong>{{this.price}}</li>
-        <li><strong>Imagen: </strong><img class="imagen-list" src="{{this.thumbnail}}" ></li><li
-        >
+        <li><strong>Imagen: </strong>
         <strong>Code: </strong>{{this.code}}</li><li
-        ><strong>Stock: </strong>{{this.stock}}</li></ul></li>
+        ><strong>Cantidad: </strong>{{this.quantity}}</li></ul></li>
   {{/each}}

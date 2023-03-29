@@ -14,8 +14,10 @@ else{
                 {
                     product:{
                         type: mongoose.Schema.Types.ObjectId,
-                        ref: 'products'
-                    }
+                        ref: 'products',
+                        
+                    },
+                    quantity:Number
                     
                 }
             ],
@@ -33,11 +35,19 @@ export class ManagerCartMongoDB extends ManagerMongoDB {
         //Aqui irian los atributos propios de la clase
     }
     async addProduct(idCart,idProduct){
-        if(managerProduct.getElementById(idProduct)){
+        if(await managerProduct.getElementById(idProduct)){
             try{
                 const cart=await this.model.findById(idCart)
-                console.log(await cart)
-                await cart.products.push({product:idProduct})
+                let index=await cart.products.findIndex(element => element.product==idProduct)
+                if(index !=-1){
+                    cart.products[index].quantity+=1;
+                }
+                else{
+                    await cart.products.push({  
+                        product:idProduct,
+                        quantity: 1})
+                } 
+                console.log(await cart) 
                 cart.save()
                 return cart
             }catch(error){
@@ -53,8 +63,9 @@ export class ManagerCartMongoDB extends ManagerMongoDB {
             try{
                 const cart=await this.model.findById(idCart)
                 await cart.products.remove(id)
-                cart.save()
-                return cart
+                await cart.save()
+                
+                return (cart)
             }catch(error){
                 console.log(error)
                 return error
@@ -66,7 +77,8 @@ export class ManagerCartMongoDB extends ManagerMongoDB {
     async getProducts(idCart){
         try{
             const cart= await this.model.findById(idCart)
-            return await cart.populate('products.product')
+            let cartTotal=await cart.populate('products.product')
+            return  cartTotal
         }catch(error){
             console.log(error)
             return (error)
@@ -78,11 +90,27 @@ export class ManagerCartMongoDB extends ManagerMongoDB {
             const cart=await this.model.findById(idCart)
             cart.products=[]
             cart.save()
+            return("Carrito Vacio")
         }catch(error){
             console.log(error)
             return error
         }
         
+    }
+
+    async updateProduct(idCart,idProduct,quantity){
+        try{
+            const cart=await this.model.findById(idCart)
+            let index=await cart.products.findIndex(element => element.product==idProduct)
+            if(index !=-1){
+                cart.products[index].quantity=parseInt(quantity.quantity);
+            }
+            cart.save()
+            return(cart)
+        }catch(error){
+            console.log(error)
+            return error
+        }
     }
 
     async createCart(){
