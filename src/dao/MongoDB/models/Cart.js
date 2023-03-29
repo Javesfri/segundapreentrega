@@ -39,7 +39,7 @@ export class ManagerCartMongoDB extends ManagerMongoDB {
                 console.log(await cart)
                 await cart.products.push({product:idProduct})
                 cart.save()
-                return true
+                return cart
             }catch(error){
                 console.log(error)
                 return error
@@ -65,7 +65,7 @@ export class ManagerCartMongoDB extends ManagerMongoDB {
 
     async getProducts(idCart){
         try{
-            const cart=this.model.findById(idCart)
+            const cart= await this.model.findById(idCart)
             return await cart.populate('products.product')
         }catch(error){
             console.log(error)

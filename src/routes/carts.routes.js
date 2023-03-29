@@ -21,8 +21,9 @@ routerCart.get('/', async (req,res)=>{
 
 routerCart.get('/:cid', async (req,res)=>{
     const products=await cartManager.getProducts(req.params.cid)
-    const listProducts= products.products
+    const listProducts=await products.products
     const total=[]
+    console.log(await listProducts)
     listProducts.map(prod =>{
         const newProd={...prod.product._doc}
         console.log(newProd)
@@ -30,7 +31,8 @@ routerCart.get('/:cid', async (req,res)=>{
         total.push({title:title,description:description,price:price,code:code,category:category})
 
     })
-    res.render("cart", {total})
+    res.send(total)
+    //res.render("cart", {total})
 
 })
 
