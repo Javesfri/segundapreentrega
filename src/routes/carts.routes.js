@@ -31,7 +31,6 @@ routerCart.get('/:cid', async (req,res)=>{
         total.push({title:title,description:description,price:price,code:code,category:category,quantity:prod.quantity ,imagen:thumbnail})
 
     })
-    console.log(await total)
     //res.send(total)
     res.render("cart", {total})
 

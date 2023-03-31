@@ -62,10 +62,10 @@ export class ManagerCartMongoDB extends ManagerMongoDB {
         if(managerProduct.getElementById(id)){
             try{
                 const cart=await this.model.findById(idCart)
-                await cart.products.remove(id)
+                await cart.products.remove({product:id})
                 await cart.save()
                 
-                return (cart)
+                return ( await this.model.findById(idCart))
             }catch(error){
                 console.log(error)
                 return error

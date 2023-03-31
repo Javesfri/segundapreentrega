@@ -50,7 +50,7 @@ export class ManagerProductMongoDB extends ManagerMongoDB {
         //Aqui irian los atributos propios de la clase
     }
 
-    async getPagProducts(category,sort,page,limit){
+    async getPagProducts(category,ord,page,limit){
         try {
             let query = {};
             if (category) {
@@ -59,7 +59,7 @@ export class ManagerProductMongoDB extends ManagerMongoDB {
             let products = await this.model.paginate(query, {
               limit: limit,
               page: page,
-              sort: sort,
+              sort: {price:ord},
             });
             return products
           } catch (error) {

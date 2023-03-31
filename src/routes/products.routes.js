@@ -7,9 +7,10 @@ const routerProduct = Router();
 routerProduct.get("/", async (req, res) => {
   const category = req.query.category;
   const sort = req.query.sort;
+  const ord= sort=="asc"?1:-1;
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 10;
-  const products =await productManager.getPagProducts(category,sort,page,limit)
+  const products =await productManager.getPagProducts(category,ord,page,limit)
   console.log(await products)
   res.send(products);
 });
